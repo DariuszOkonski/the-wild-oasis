@@ -13,6 +13,8 @@ export async function getCabins() {
 }
 
 export async function createEditCabin(newCabin, id) {
+  debugger;
+  // TODO: solve bug here
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
   const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
@@ -29,7 +31,7 @@ export async function createEditCabin(newCabin, id) {
 
   // create
   if (!id) {
-    query = query.from('cabins').insert([{ ...newCabin, image: imagePath }]);
+    query = query.insert([{ ...newCabin, image: imagePath }]);
   }
 
   // edit
