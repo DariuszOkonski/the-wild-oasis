@@ -13,18 +13,19 @@ export async function getCabins() {
 }
 
 export async function createEditCabin(newCabin, id) {
-  // debugger;
-  // TODO: solve bug here
   const hasImagePath = newCabin.image?.startsWith?.(supabaseUrl);
 
-  const imageName = `${Math.random()}-${newCabin.image}`.replaceAll('/', '');
+  const imageName = `${Math.random()}-${newCabin.image.name}`.replaceAll(
+    '/',
+    ''
+  );
 
   const imagePath = hasImagePath
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabin-images/${imageName}`;
 
   // 1. create/edit cabin
-  let query = supabase.from('cabin');
+  let query = supabase.from('cabins');
 
   // create
   if (!id) {
@@ -36,7 +37,6 @@ export async function createEditCabin(newCabin, id) {
     query = query.update({ ...newCabin, image: imagePath }).eq('id', id);
   }
 
-  // TODO: this line causing a bug during createon
   const { data, error } = await query.select().single();
 
   if (error) {
